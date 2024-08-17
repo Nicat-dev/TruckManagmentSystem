@@ -1,0 +1,12 @@
+spring:
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  web:
+    locale-resolver: accept-header
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
