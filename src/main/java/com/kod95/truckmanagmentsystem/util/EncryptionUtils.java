@@ -1,4 +1,4 @@
-package com.kod95.truckmanagmentsystem.utils;
+package com.kod95.truckmanagmentsystem.util;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -9,7 +9,7 @@ import com.kod95.truckmanagmentsystem.model.admin.Users;
 import com.kod95.truckmanagmentsystem.model.enums.Exceptions;
 import com.kod95.truckmanagmentsystem.repository.UsersRepository;
 import com.kod95.truckmanagmentsystem.service.UserService;
-import com.kod95.truckmanagmentsystem.utils.EncryptionUtils;
+import com.kod95.truckmanagmentsystem.util.EncryptionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

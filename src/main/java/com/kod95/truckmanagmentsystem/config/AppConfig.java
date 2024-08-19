@@ -1,6 +1,6 @@
 package com.kod95.truckmanagmentsystem.config;
 
-import com.kod95.truckmanagmentsystem.utils.EncryptionUtils;
+import com.kod95.truckmanagmentsystem.util.EncryptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
