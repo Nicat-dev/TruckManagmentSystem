@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.service.impl;
 
 import com.kod95.truckmanagmentsystem.dto.CustomerDto;
+import com.kod95.truckmanagmentsystem.dto.CustomerStatusDto;
 import com.kod95.truckmanagmentsystem.dto.request.CustomerRequest;
 import com.kod95.truckmanagmentsystem.exception.ApplicationException;
 import com.kod95.truckmanagmentsystem.mapper.CustomerMapper;
@@ -46,11 +47,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void statusChanger(Long id, CustomerStatus status) {
+    public CustomerStatusDto statusChanger(Long id, CustomerStatus status) {
         Customer customer = find(id);
         customer.setId(id);
         customer.setCustomerStatus(status);
         repository.save(customer);
+        return new CustomerStatusDto(customer.getId(), customer.getCustomerStatus());
     }
 
     @Override

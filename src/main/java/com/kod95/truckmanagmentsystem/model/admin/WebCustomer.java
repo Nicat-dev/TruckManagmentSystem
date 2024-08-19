@@ -2,10 +2,8 @@ package com.kod95.truckmanagmentsystem.model.admin;
 
 import com.kod95.truckmanagmentsystem.model.enums.CustomerLocationStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "web_customer")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebCustomer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +30,6 @@ public class WebCustomer {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false,updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
 }

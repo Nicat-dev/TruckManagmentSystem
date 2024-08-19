@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.service;
 
 import com.kod95.truckmanagmentsystem.dto.CustomerDto;
+import com.kod95.truckmanagmentsystem.dto.CustomerStatusDto;
 import com.kod95.truckmanagmentsystem.dto.request.CustomerRequest;
 import com.kod95.truckmanagmentsystem.model.admin.Users;
 import com.kod95.truckmanagmentsystem.model.enums.CustomerStatus;
@@ -12,7 +13,7 @@ public interface CustomerService {
     List<CustomerDto> getAll();
     CustomerDto get(Long id);
     List<CustomerDto> getByName(String name);
-    void statusChanger(Long id, CustomerStatus status);
+    CustomerStatusDto statusChanger(Long id, CustomerStatus status);
     void delete(Long id);
     CustomerDto update(Long id, CustomerRequest request);
 }

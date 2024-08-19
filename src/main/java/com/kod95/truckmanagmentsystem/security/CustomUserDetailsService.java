@@ -1,6 +1,5 @@
 package com.kod95.truckmanagmentsystem.security;
 
-
 import com.kod95.truckmanagmentsystem.exception.ApplicationException;
 import com.kod95.truckmanagmentsystem.model.admin.Users;
 import com.kod95.truckmanagmentsystem.model.enums.Exceptions;

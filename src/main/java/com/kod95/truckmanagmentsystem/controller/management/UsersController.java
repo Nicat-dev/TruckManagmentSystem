@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -51,5 +52,11 @@ public class UsersController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/revenue/{id}")
+    public ResponseEntity<BigDecimal> getRevenue(@PathVariable Long id){
+        final var revenue = service.getRevenue(id);
+        return ResponseEntity.ok().body(revenue);
     }
 }

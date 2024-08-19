@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.controller.management;
 
 import com.kod95.truckmanagmentsystem.dto.CustomerDto;
+import com.kod95.truckmanagmentsystem.dto.CustomerStatusDto;
 import com.kod95.truckmanagmentsystem.dto.request.CustomerRequest;
 import com.kod95.truckmanagmentsystem.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,13 @@ public class CustomerController {
         return ResponseEntity.created(location).body(dto);
     }
 
+    @PostMapping("/status/{id}")
+    public ResponseEntity<CustomerStatusDto> statusChanger(@RequestBody CustomerRequest request,@PathVariable Long id){
+        final var status = service.statusChanger(id,request.customerStatus());
+        final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(id);
+        return ResponseEntity.created(location).body(status);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDto> update(@RequestBody CustomerRequest request, @PathVariable Long id){
         final var dto = service.update(id,request);
@@ -49,7 +57,6 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
-
         return ResponseEntity.noContent().build();
     }
 
