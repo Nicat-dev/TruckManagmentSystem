@@ -12,7 +12,7 @@ public interface UserService {
     List<UsersDto> getList();
     UsersDto get(Long id);
     UsersDto update(Long id, UserRequest request);
-    UsersDto save(UserRequest request);
+    UsersDto save(UserRequest request) throws Exception;
     void delete(Long id);
     Users findUser(Long id);
     BigDecimal getRevenue(Long id);

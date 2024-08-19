@@ -9,6 +9,7 @@ import com.kod95.truckmanagmentsystem.model.admin.Users;
 import com.kod95.truckmanagmentsystem.model.enums.Exceptions;
 import com.kod95.truckmanagmentsystem.repository.UsersRepository;
 import com.kod95.truckmanagmentsystem.service.UserService;
+import com.kod95.truckmanagmentsystem.utils.EncryptionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UsersRepository repository;
     private final UserMapper mapper;
+    private final EncryptionUtils encryptionUtils;
 
     @Override
     public List<UsersDto> getList() {
@@ -35,14 +37,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsersDto update(Long id, UserRequest request) {
         return repository.findById(id).map(users -> {
-            Users usersMapper = mapper.requestToDto(request);
+            Users usersMapper = mapper.requestToEntity(request);
             return mapper.entityToDto(repository.save(usersMapper));
         }).orElseThrow(() -> new ApplicationException(Exceptions.USER_NOT_FOUND_EXCEPTION));
     }
 
     @Override
-    public UsersDto save(UserRequest request) {
-        return mapper.entityToDto(repository.save(mapper.requestToDto(request)));
+    public UsersDto save(UserRequest request) throws Exception {
+        Users newUser = mapper.requestToEntity(request);
+        newUser.setPassword(encryptionUtils.encrypt(request.password()));
+        return mapper.entityToDto(repository.save(newUser));
     }
 
     @Override

@@ -36,6 +36,8 @@ public class Users {
     BigDecimal totalRevenue;
     @Column(name = "username",nullable = false,unique = true)
     String username;
+    @Column(nullable = false)
+    String password;
     @Column(name = "user_auth", nullable = false)
     @Enumerated(EnumType.STRING)
     UserAuth userAuth;

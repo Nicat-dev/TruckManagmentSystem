@@ -31,7 +31,7 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<UsersDto> save(@RequestBody UserRequest request){
+    public ResponseEntity<UsersDto> save(@RequestBody UserRequest request) throws Exception {
         final var dto = service.save(request);
         final var location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/{id}").build(dto.getId());
