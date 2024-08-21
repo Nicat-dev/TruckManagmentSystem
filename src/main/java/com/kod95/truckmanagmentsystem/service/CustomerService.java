@@ -16,4 +16,6 @@ public interface CustomerService {
     CustomerStatusDto statusChanger(Long id, CustomerStatus status);
     void delete(Long id);
     CustomerDto update(Long id, CustomerRequest request);
+    void deactivate(Long id);
+    void activate(Long id);
 }

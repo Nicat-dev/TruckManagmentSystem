@@ -69,6 +69,20 @@ public class CustomerServiceImpl implements CustomerService {
         }).orElseThrow(() -> new ApplicationException(Exceptions.CUSTOMER_CANNOT_FOUND));
     }
 
+    @Override
+    public void deactivate(Long id) {
+        Customer customer = find(id);
+        customer.setCustomerStatus(CustomerStatus.DE_ACTIVE);
+        repository.save(customer);
+    }
+
+    @Override
+    public void activate(Long id) {
+        Customer customer = find(id);
+        customer.setCustomerStatus(CustomerStatus.ACTIVE);
+        repository.save(customer);
+    }
+
     private Customer find(Long id){
         return repository.findById(id)
                 .orElseThrow(()-> new ApplicationException(Exceptions.CUSTOMER_CANNOT_FOUND));

@@ -19,7 +19,7 @@ public class CustomerController {
     private final CustomerService service;
 
     @PostMapping
-    public ResponseEntity<CustomerDto> save(@RequestBody CustomerRequest request){
+    public ResponseEntity<CustomerDto> save(@RequestBody CustomerRequest request) {
         final var dto = service.save(request);
         final var location = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/{id}").build(dto.getId());
@@ -28,34 +28,46 @@ public class CustomerController {
     }
 
     @PostMapping("/status/{id}")
-    public ResponseEntity<CustomerStatusDto> statusChanger(@RequestBody CustomerRequest request,@PathVariable Long id){
-        final var status = service.statusChanger(id,request.customerStatus());
+    public ResponseEntity<CustomerStatusDto> statusChanger(@RequestBody CustomerRequest request, @PathVariable Long id) {
+        final var status = service.statusChanger(id, request.customerStatus());
         final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(id);
         return ResponseEntity.created(location).body(status);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDto> update(@RequestBody CustomerRequest request, @PathVariable Long id){
-        final var dto = service.update(id,request);
+    public ResponseEntity<CustomerDto> update(@RequestBody CustomerRequest request, @PathVariable Long id) {
+        final var dto = service.update(id, request);
         final var location = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/{id}").build(dto.getId());
         return ResponseEntity.created(location).body(dto);
     }
 
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<Void> activate(@PathVariable Long id) {
+        service.activate(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/deactivate/{id}")
+    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
+        service.deactivate(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDto> get(@PathVariable Long id){
+    public ResponseEntity<CustomerDto> get(@PathVariable Long id) {
         final var dto = service.get(id);
         return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerDto>> getAll(){
+    public ResponseEntity<List<CustomerDto>> getAll() {
         final var dtoList = service.getAll();
         return ResponseEntity.ok().body(dtoList);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
