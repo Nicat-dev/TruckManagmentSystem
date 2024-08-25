@@ -49,6 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerStatusDto statusChanger(Long id, CustomerStatus status) {
         Customer customer = find(id);
+
         customer.setId(id);
         customer.setCustomerStatus(status);
         repository.save(customer);

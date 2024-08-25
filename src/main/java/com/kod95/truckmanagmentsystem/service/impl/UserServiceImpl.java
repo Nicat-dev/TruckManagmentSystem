@@ -9,8 +9,8 @@ import com.kod95.truckmanagmentsystem.model.admin.Users;
 import com.kod95.truckmanagmentsystem.model.enums.Exceptions;
 import com.kod95.truckmanagmentsystem.repository.UsersRepository;
 import com.kod95.truckmanagmentsystem.service.UserService;
-import com.kod95.truckmanagmentsystem.util.EncryptionUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UsersRepository repository;
     private final UserMapper mapper;
-    private final EncryptionUtils encryptionUtils;
+    private final PasswordEncoder passwordEncoder;  // Use PasswordEncoder instead of EncryptionUtils
 
     @Override
     public List<UsersDto> getList() {
@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UsersDto save(UserRequest request) throws Exception {
+    public UsersDto save(UserRequest request) {
         Users newUser = mapper.requestToEntity(request);
-        newUser.setPassword(encryptionUtils.encrypt(request.password()));
+        newUser.setPassword(passwordEncoder.encode(request.password()));  // Hash the password
         return mapper.entityToDto(repository.save(newUser));
     }
 
@@ -57,16 +57,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public BigDecimal getRevenue(Long id) {
         Users user = findUser(id);
-
         return user.getCustomers().stream()
                 .map(Customer::getCustomerRevenue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-
     @Override
     public Users findUser(Long id){
-       return repository.findById(id)
-               .orElseThrow(() -> new ApplicationException(Exceptions.USER_NOT_FOUND_EXCEPTION));
+        return repository.findById(id)
+                .orElseThrow(() -> new ApplicationException(Exceptions.USER_NOT_FOUND_EXCEPTION));
     }
 }

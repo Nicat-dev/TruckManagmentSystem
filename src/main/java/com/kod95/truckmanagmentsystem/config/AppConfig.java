@@ -1,6 +1,5 @@
 package com.kod95.truckmanagmentsystem.config;
 
-import com.kod95.truckmanagmentsystem.util.EncryptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +15,6 @@ public class AppConfig {
 
     @Value("${encryption.secret-key}")
     private String secretKey;
-
-    @Bean
-    public EncryptionUtils encryptionUtils() {
-        return new EncryptionUtils(algorithm, secretKey);
-    }
 
     @Bean
     public MessageSource messageSource() {
