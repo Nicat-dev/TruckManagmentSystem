@@ -1,7 +1,8 @@
 package com.kod95.truckmanagmentsystem.security;
 
 import com.kod95.truckmanagmentsystem.util.JwtTokenUtil;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,16 +16,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 
-import static com.kod95.truckmanagmentsystem.model.constant.ExceptionMessage.JWT_ERROR;
-import static com.kod95.truckmanagmentsystem.model.constant.ExceptionMessage.TOKEN_IS_EXPIRED;
-
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
-    @Value("${jwt.header}")
-    private String header;
+    private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     public JwtRequestFilter(CustomUserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil) {
         this.userDetailsService = userDetailsService;
@@ -35,13 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        final String requestURI = request.getRequestURI();
-        if ("/authenticate".equals(requestURI)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        final String authorizationHeader = request.getHeader(header);
+        final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwt = null;
@@ -50,36 +41,38 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             try {
                 username = jwtTokenUtil.extractUsername(jwt);
+                logger.info("JWT token found, processing user: {}", username);
             } catch (ExpiredJwtException e) {
-                logger.error(TOKEN_IS_EXPIRED, e);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"error\": \"" + TOKEN_IS_EXPIRED + "\"}");
-                return; // Stop further processing after writing the response
+                logger.warn("JWT token has expired for user: {}", e.getClaims().getSubject());
+                handleException(response, "JWT token has expired", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             } catch (Exception e) {
-                logger.error(JWT_ERROR, e);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"error\": \"" + JWT_ERROR + "\"}");
-                return; // Stop further processing after writing the response
+                logger.error("JWT token processing failed: {}", e.getMessage());
+                handleException(response, "JWT token processing failed", HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
             if (jwtTokenUtil.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                logger.info("JWT token validated and user authenticated: {}", username);
+            } else {
+                logger.warn("Invalid JWT token for user: {}", username);
             }
         }
 
         chain.doFilter(request, response);
     }
 
-
+    private void handleException(HttpServletResponse response, String errorMessage, int statusCode) throws IOException {
+        response.setStatus(statusCode);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"error\": \"" + errorMessage + "\"}");
+    }
 }

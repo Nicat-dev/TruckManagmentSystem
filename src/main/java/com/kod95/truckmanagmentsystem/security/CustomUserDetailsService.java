@@ -2,9 +2,7 @@ package com.kod95.truckmanagmentsystem.security;
 
 import com.kod95.truckmanagmentsystem.exception.ApplicationException;
 import com.kod95.truckmanagmentsystem.model.admin.Users;
-import com.kod95.truckmanagmentsystem.model.enums.Exceptions;
 import com.kod95.truckmanagmentsystem.repository.UsersRepository;
-import com.kod95.truckmanagmentsystem.util.EncryptionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,15 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsersRepository userRepository;
-    private final EncryptionUtils encryptionUtils;
-
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -29,16 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         System.out.println("Loaded user: " + username + " with roles: " + user.getUserAuth());
 
-        try {
-            return new org.springframework.security.core.userdetails.User(
-                    user.getUsername(),
-                    encryptionUtils.decrypt(user.getPassword()),
-                    AuthorityUtils.createAuthorityList(user.getUserAuth().toString())
-            );
-        } catch (Exception e) {
-            throw new ApplicationException(Exceptions.USER_NOT_FOUND_EXCEPTION);
-        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),  // Use the hashed password directly
+                AuthorityUtils.createAuthorityList("ROLE_" + user.getUserAuth().toString())
+        );
     }
-
 }
-
