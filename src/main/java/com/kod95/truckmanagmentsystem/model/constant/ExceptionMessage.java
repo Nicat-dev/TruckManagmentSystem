@@ -12,4 +12,6 @@ public class ExceptionMessage {
     public static final String RESOURCE_ID_CAN_NOT_BE_NULL = "Resource Id cannot be null";
     public static final String CUSTOMER_NOT_FOUND = "Customer cannot found";
     public static final String USER_CREDENTIALS_WRONG = "Incorrect username or password";
+    public static final String ACCESS_DENIED = "Access denied !";
+    public static final String AUTHENTICATION_FAILED = "Authentication failed !";
 }

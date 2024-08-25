@@ -12,13 +12,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration{
+public class SecurityConfiguration {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
@@ -26,23 +27,20 @@ public class SecurityConfiguration{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection for APIs
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                      //  .requestMatchers("/authenticate").permitAll()// Allow unauthenticated access to /authenticate
+                        .requestMatchers("/api/auth/authenticate").permitAll()
                         .requestMatchers("/api/v1/user").permitAll()
-                        .anyRequest().authenticated()                 // All other requests require authentication
+                        .requestMatchers("/api/v1/info").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .formLogin(withDefaults()) // Enable form login with default configuration
-                .httpBasic(withDefaults()); // Enable HTTP Basic authentication with default configuration
+                .formLogin(withDefaults())
+                .httpBasic(withDefaults());
+
+        // Directly add JwtRequestFilter without defining it as a bean
+        http.addFilterBefore(new JwtRequestFilter(userDetailsService, jwtTokenUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-
-
-    @Bean
-    public JwtRequestFilter jwtRequestFilter() {
-        return new JwtRequestFilter(userDetailsService,jwtTokenUtil); // Properly instantiate your filter
     }
 
     @Bean
@@ -52,7 +50,6 @@ public class SecurityConfiguration{
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Use BCrypt for encoding passwords
+        return new BCryptPasswordEncoder();
     }
-
 }
