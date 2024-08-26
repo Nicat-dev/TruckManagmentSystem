@@ -3,11 +3,14 @@ package com.kod95.truckmanagmentsystem.dto.request;
 import com.kod95.truckmanagmentsystem.model.enums.CustomerLocationStatus;
 import com.kod95.truckmanagmentsystem.model.enums.CustomerStatus;
 import com.kod95.truckmanagmentsystem.model.enums.ProcedureEnum;
+import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 
 public record CustomerRequest(
+        @NotBlank(message = "name cannot be blank")
         String name,
+        @NotBlank(message = "surname cannot be blank")
         String surname,
         String email,
         BigDecimal customerRevenue,

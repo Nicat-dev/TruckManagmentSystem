@@ -16,5 +16,6 @@ public interface UserService {
     void delete(Long id);
     Users findUser(Long id);
     BigDecimal getRevenue(Long id);
+    void renewPassword(Long id,String password);
 
 }

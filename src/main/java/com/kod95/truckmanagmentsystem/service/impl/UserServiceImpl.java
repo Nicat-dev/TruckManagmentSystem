@@ -10,6 +10,7 @@ import com.kod95.truckmanagmentsystem.model.enums.Exceptions;
 import com.kod95.truckmanagmentsystem.repository.UsersRepository;
 import com.kod95.truckmanagmentsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,13 @@ public class UserServiceImpl implements UserService {
         return user.getCustomers().stream()
                 .map(Customer::getCustomerRevenue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public void renewPassword(Long id,String password) {
+        Users user = findUser(id);
+        user.setPassword(password);
+        repository.save(user);
     }
 
     @Override
