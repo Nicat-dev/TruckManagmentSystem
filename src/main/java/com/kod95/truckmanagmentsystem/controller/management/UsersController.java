@@ -3,6 +3,7 @@ package com.kod95.truckmanagmentsystem.controller.management;
 import com.kod95.truckmanagmentsystem.dto.UsersDto;
 import com.kod95.truckmanagmentsystem.dto.request.UserRequest;
 import com.kod95.truckmanagmentsystem.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<UsersDto> save(@RequestBody UserRequest request) throws Exception {
+    public ResponseEntity<UsersDto> save(@Valid @RequestBody UserRequest request) throws Exception {
         final var dto = service.save(request);
         final var location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/{id}").build(dto.getId());
@@ -41,11 +42,17 @@ public class UsersController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsersDto> update(@RequestBody UserRequest request, @PathVariable Long id){
+    public ResponseEntity<UsersDto> update(@Valid @RequestBody UserRequest request, @PathVariable Long id){
         final var dto = service.update(id,request);
         final var location = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/{id}").build(dto.getId());
         return ResponseEntity.created(location).body(dto);
+    }
+
+    @PutMapping("/renewPassword/{id}")
+    public ResponseEntity<Void> renewPassword(@PathVariable Long id,@RequestBody String password){
+        service.renewPassword(id,password);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
