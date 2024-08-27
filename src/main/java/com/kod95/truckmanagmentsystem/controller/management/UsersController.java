@@ -6,6 +6,7 @@ import com.kod95.truckmanagmentsystem.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,6 +33,7 @@ public class UsersController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UsersDto> save(@Valid @RequestBody UserRequest request) throws Exception {
         final var dto = service.save(request);
@@ -41,6 +43,7 @@ public class UsersController {
         return ResponseEntity.created(location).body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UsersDto> update(@Valid @RequestBody UserRequest request, @PathVariable Long id){
         final var dto = service.update(id,request);
