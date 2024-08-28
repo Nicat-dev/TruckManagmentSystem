@@ -48,15 +48,15 @@ public class Customer {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false,updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users users;
+    Users users;
 
 }
