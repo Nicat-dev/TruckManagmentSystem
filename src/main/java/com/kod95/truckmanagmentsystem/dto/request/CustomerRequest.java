@@ -13,7 +13,9 @@ public record CustomerRequest(
         @NotBlank(message = "surname cannot be blank")
         String surname,
         String email,
+        @NotBlank(message = "customer revenue cannot be null")
         BigDecimal customerRevenue,
+        @NotBlank(message = "customer number cannot be null")
         String number,
         Long userId,
         ProcedureEnum procedure,
