@@ -6,6 +6,7 @@ import com.kod95.truckmanagmentsystem.dto.request.CustomerRequest;
 import com.kod95.truckmanagmentsystem.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -66,6 +67,20 @@ public class CustomerController {
         return ResponseEntity.ok().body(dtoList);
     }
 
+    @GetMapping("/activeList")
+    public ResponseEntity<List<CustomerDto>> getAllActive(){
+        final var dtoList = service.getAllActive();
+        return ResponseEntity.ok().body(dtoList);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/inactiveList")
+    public ResponseEntity<List<CustomerDto>> getAllInactive(){
+        final var dtoList = service.getAllInactive();
+        return ResponseEntity.ok().body(dtoList);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

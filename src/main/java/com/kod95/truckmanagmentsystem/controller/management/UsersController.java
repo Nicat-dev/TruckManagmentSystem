@@ -52,18 +52,21 @@ public class UsersController {
         return ResponseEntity.created(location).body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/renewPassword/{id}")
     public ResponseEntity<Void> renewPassword(@PathVariable Long id,@RequestBody String password){
         service.renewPassword(id,password);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/revenue/{id}")
     public ResponseEntity<BigDecimal> getRevenue(@PathVariable Long id){
         final var revenue = service.getRevenue(id);
