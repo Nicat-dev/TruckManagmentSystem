@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.service;
 
 import com.kod95.truckmanagmentsystem.dto.UsersDto;
+import com.kod95.truckmanagmentsystem.dto.request.ResetPassword;
 import com.kod95.truckmanagmentsystem.dto.request.UserRequest;
 import com.kod95.truckmanagmentsystem.model.admin.Users;
 
@@ -16,6 +17,6 @@ public interface UserService {
     void delete(Long id);
     Users findUser(Long id);
     BigDecimal getRevenue(Long id);
-    void renewPassword(Long id,String password);
+    void renewPassword(Long id, ResetPassword resetPassword);
 
 }

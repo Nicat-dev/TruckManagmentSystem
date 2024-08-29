@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.controller.management;
 
 import com.kod95.truckmanagmentsystem.dto.UsersDto;
+import com.kod95.truckmanagmentsystem.dto.request.ResetPassword;
 import com.kod95.truckmanagmentsystem.dto.request.UserRequest;
 import com.kod95.truckmanagmentsystem.service.UserService;
 import jakarta.validation.Valid;
@@ -54,8 +55,8 @@ public class UsersController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/renewPassword/{id}")
-    public ResponseEntity<Void> renewPassword(@PathVariable Long id,@RequestBody String password){
-        service.renewPassword(id,password);
+    public ResponseEntity<Void> renewPassword(@PathVariable Long id,@RequestBody ResetPassword resetPassword){
+        service.renewPassword(id,resetPassword);
         return ResponseEntity.noContent().build();
     }
 

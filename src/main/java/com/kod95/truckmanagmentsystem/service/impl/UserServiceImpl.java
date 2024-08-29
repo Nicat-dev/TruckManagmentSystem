@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.service.impl;
 
 import com.kod95.truckmanagmentsystem.dto.UsersDto;
+import com.kod95.truckmanagmentsystem.dto.request.ResetPassword;
 import com.kod95.truckmanagmentsystem.dto.request.UserRequest;
 import com.kod95.truckmanagmentsystem.exception.ApplicationException;
 import com.kod95.truckmanagmentsystem.mapper.UserMapper;
@@ -64,9 +65,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void renewPassword(Long id,String password) {
+    public void renewPassword(Long id, ResetPassword resetPassword) {
         Users user = findUser(id);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(resetPassword.password()));
         repository.save(user);
     }
 
