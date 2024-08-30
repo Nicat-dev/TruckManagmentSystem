@@ -84,6 +84,16 @@ public class CustomerServiceImpl implements CustomerService {
         repository.save(customer);
     }
 
+    @Override
+    public List<CustomerDto> getAllActive() {
+        return mapper.entityListToDtoList(repository.findAllByCustomerStatus(CustomerStatus.ACTIVE));
+    }
+
+    @Override
+    public List<CustomerDto> getAllInactive() {
+        return mapper.entityListToDtoList(repository.findAllByCustomerStatus(CustomerStatus.DE_ACTIVE));
+    }
+
     private Customer find(Long id){
         return repository.findById(id)
                 .orElseThrow(()-> new ApplicationException(Exceptions.CUSTOMER_CANNOT_FOUND));

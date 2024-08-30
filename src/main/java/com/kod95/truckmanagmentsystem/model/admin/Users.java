@@ -45,12 +45,12 @@ public class Users {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false,updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Customer> customers;
