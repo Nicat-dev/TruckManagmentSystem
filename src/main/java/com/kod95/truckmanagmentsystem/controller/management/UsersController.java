@@ -1,11 +1,13 @@
 package com.kod95.truckmanagmentsystem.controller.management;
 
 import com.kod95.truckmanagmentsystem.dto.UsersDto;
+import com.kod95.truckmanagmentsystem.dto.request.ResetPassword;
 import com.kod95.truckmanagmentsystem.dto.request.UserRequest;
 import com.kod95.truckmanagmentsystem.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,6 +34,7 @@ public class UsersController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UsersDto> save(@Valid @RequestBody UserRequest request) throws Exception {
         final var dto = service.save(request);
@@ -41,6 +44,7 @@ public class UsersController {
         return ResponseEntity.created(location).body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UsersDto> update(@Valid @RequestBody UserRequest request, @PathVariable Long id){
         final var dto = service.update(id,request);
@@ -49,18 +53,21 @@ public class UsersController {
         return ResponseEntity.created(location).body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/renewPassword/{id}")
-    public ResponseEntity<Void> renewPassword(@PathVariable Long id,@RequestBody String password){
-        service.renewPassword(id,password);
+    public ResponseEntity<Void> renewPassword(@PathVariable Long id,@RequestBody ResetPassword resetPassword){
+        service.renewPassword(id,resetPassword);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/revenue/{id}")
     public ResponseEntity<BigDecimal> getRevenue(@PathVariable Long id){
         final var revenue = service.getRevenue(id);

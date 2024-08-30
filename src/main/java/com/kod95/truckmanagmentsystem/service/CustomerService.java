@@ -18,4 +18,6 @@ public interface CustomerService {
     CustomerDto update(Long id, CustomerRequest request);
     void deactivate(Long id);
     void activate(Long id);
+    List<CustomerDto> getAllActive();
+    List<CustomerDto> getAllInactive();
 }
