@@ -80,6 +80,24 @@ public class CustomerController {
         return ResponseEntity.ok().body(dtoList);
     }
 
+    @GetMapping("/countActive")
+    public ResponseEntity<Long> countActiveCustomers() {
+        final var dto = service.countActiveCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/countInactive")
+    public ResponseEntity<Long> countInactiveCustomers() {
+        final var dto = service.countInactiveCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/countPending")
+    public ResponseEntity<Long> countPendingCustomer(){
+        final var dto = service.countPendingCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

@@ -94,6 +94,21 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.entityListToDtoList(repository.findAllByCustomerStatus(CustomerStatus.DE_ACTIVE));
     }
 
+    @Override
+    public Long countActiveCustomers() {
+        return repository.countByCustomerStatus(CustomerStatus.ACTIVE);
+    }
+
+    @Override
+    public Long countInactiveCustomers() {
+        return repository.countByCustomerStatus(CustomerStatus.DE_ACTIVE);
+    }
+
+    @Override
+    public Long countPendingCustomers() {
+        return repository.countByCustomerStatus(CustomerStatus.PENDING);
+    }
+
     private Customer find(Long id){
         return repository.findById(id)
                 .orElseThrow(()-> new ApplicationException(Exceptions.CUSTOMER_CANNOT_FOUND));

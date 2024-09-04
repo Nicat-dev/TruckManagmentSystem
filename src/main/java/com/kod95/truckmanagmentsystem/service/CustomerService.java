@@ -20,4 +20,7 @@ public interface CustomerService {
     void activate(Long id);
     List<CustomerDto> getAllActive();
     List<CustomerDto> getAllInactive();
+    Long countActiveCustomers();
+    Long countInactiveCustomers();
+    Long countPendingCustomers();
 }
