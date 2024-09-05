@@ -86,6 +86,7 @@ public class CustomerController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/countInactive")
     public ResponseEntity<Long> countInactiveCustomers() {
         final var dto = service.countInactiveCustomers();
@@ -95,6 +96,12 @@ public class CustomerController {
     @GetMapping("/countPending")
     public ResponseEntity<Long> countPendingCustomer(){
         final var dto = service.countPendingCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Long> countCustomerByUserId(@PathVariable Long id){
+        final var dto = service.countCustomersByUserId(id);
         return ResponseEntity.ok().body(dto);
     }
 

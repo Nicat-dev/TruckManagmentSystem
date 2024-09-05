@@ -23,4 +23,5 @@ public interface CustomerService {
     Long countActiveCustomers();
     Long countInactiveCustomers();
     Long countPendingCustomers();
+    Long countCustomersByUserId(Long id);
 }

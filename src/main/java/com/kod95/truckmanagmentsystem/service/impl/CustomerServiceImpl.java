@@ -109,6 +109,11 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.countByCustomerStatus(CustomerStatus.PENDING);
     }
 
+    @Override
+    public Long countCustomersByUserId(Long id) {
+        return repository.countByUsersId(id);
+    }
+
     private Customer find(Long id){
         return repository.findById(id)
                 .orElseThrow(()-> new ApplicationException(Exceptions.CUSTOMER_CANNOT_FOUND));
