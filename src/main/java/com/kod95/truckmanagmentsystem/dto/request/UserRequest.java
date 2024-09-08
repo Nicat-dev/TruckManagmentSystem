@@ -2,6 +2,7 @@ package com.kod95.truckmanagmentsystem.dto.request;
 
 import com.kod95.truckmanagmentsystem.model.enums.UserAuth;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record UserRequest(
         @NotBlank(message = "name cannot be blank")
@@ -10,7 +11,7 @@ public record UserRequest(
         String surname,
         @NotBlank(message = "email cannot be blank")
         String email,
-        @NotBlank(message = "age cannot be blank")
+        @NotNull(message = "age cannot be null")
         Integer age,
         @NotBlank(message = "username cannot be blank")
         String username,

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/webCustomer")
+@RequestMapping("v1/webCustomer")
 @RequiredArgsConstructor
 public class WebCustomerController {
 

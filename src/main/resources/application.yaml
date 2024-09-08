@@ -1,0 +1,109 @@
+spring:
+  application:
+    name: TruckManagementSystem
+
+
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
+  jackson:
+    serialization:
+      indent-output: true
+      write-dates-as-timestamps: false
+
+  datasource:
+    username: ${DB_USER:milal}
+    password: ${DB_PASS:milal.azpass}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/truck_management_db
+    driverClassName: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 0
+      maximum-pool-size: 40
+      max-lifetime: 900000
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+      auto-commit: false
+      data-source-properties:
+        useServerPrepStmts: false
+        cachePrepStmts: true
+        prepStmtCacheSize: 500
+        prepStmtCacheSqlLimit: 1024
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+          batch_size: 15
+        order_inserts: true
+        order_updates: true
+        connection:
+          provider_disables_autocommit: true
+        query:
+          in_clause_parameter_padding: true
+          fail_on_pagination_over_collection_fetch: true
+          plan_cache_max_size: 4096
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  main:
+    allow-bean-definition-overriding: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    display-request-duration: true
+    try-it-out-enabled: true
+    deep-linking: true
+    persist-authorization: true
+    filter: true
+    tagsSorter: alpha
+    operationsSorter: method
+
+server:
+  tomcat:
+    remoteip:
+      remote-ip-header: x-forwarded-for
+      protocol-header: x-forwarded-proto
+  port: 8080
+  compression:
+    enabled: true
+    mime-types:
+      - text/html
+      - text/css
+      - text/javascript
+      - application/javascript
+      - application/json
+      - application/xml
+      - text/xml
+    min-response-size: 1024
+  servlet:
+    context-path: /api
+    application-display-name: TruckManagementSystemDemo
+
+
+  error:
+    whitelabel:
+      enabled: false
+
+jwt:
+  header: Authorization
+  secret-key: 8Zz5tw0Ionm3XPZZfN0NOml3z9FMfmpgXwovR9fp6ryDIoGRM8EPHAB6iHsc0fb
+  expiration-time: 86400000
+  encode-algorithm: AES
+
+encryption:
+  secret-key: AlL3viZHrAkNe7Uc
+
+logging:
+  level:
+    root: info
+

@@ -12,7 +12,6 @@ public interface CustomerService {
     CustomerDto save(CustomerRequest request);
     List<CustomerDto> getAll();
     CustomerDto get(Long id);
-    List<CustomerDto> getByName(String name);
     CustomerStatusDto statusChanger(Long id, CustomerStatus status);
     void delete(Long id);
     CustomerDto update(Long id, CustomerRequest request);

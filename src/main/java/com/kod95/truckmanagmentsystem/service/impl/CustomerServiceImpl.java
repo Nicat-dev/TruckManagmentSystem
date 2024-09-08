@@ -41,10 +41,6 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.entityToDto(find(id));
     }
 
-    @Override
-    public List<CustomerDto> getByName(String name) {
-        return mapper.entityListToDtoList(repository.findAll());
-    }
 
     @Override
     public CustomerStatusDto statusChanger(Long id, CustomerStatus status) {
