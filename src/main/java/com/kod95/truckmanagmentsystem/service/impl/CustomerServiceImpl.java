@@ -41,10 +41,6 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.entityToDto(find(id));
     }
 
-    @Override
-    public List<CustomerDto> getByName(String name) {
-        return mapper.entityListToDtoList(repository.findAll());
-    }
 
     @Override
     public CustomerStatusDto statusChanger(Long id, CustomerStatus status) {
@@ -92,6 +88,26 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDto> getAllInactive() {
         return mapper.entityListToDtoList(repository.findAllByCustomerStatus(CustomerStatus.DE_ACTIVE));
+    }
+
+    @Override
+    public Long countActiveCustomers() {
+        return repository.countByCustomerStatus(CustomerStatus.ACTIVE);
+    }
+
+    @Override
+    public Long countInactiveCustomers() {
+        return repository.countByCustomerStatus(CustomerStatus.DE_ACTIVE);
+    }
+
+    @Override
+    public Long countPendingCustomers() {
+        return repository.countByCustomerStatus(CustomerStatus.PENDING);
+    }
+
+    @Override
+    public Long countCustomersByUserId(Long id) {
+        return repository.countByUsersId(id);
     }
 
     private Customer find(Long id){
