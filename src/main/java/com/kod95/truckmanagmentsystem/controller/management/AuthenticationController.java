@@ -6,8 +6,11 @@ import com.kod95.truckmanagmentsystem.security.AuthenticationService;
 import com.kod95.truckmanagmentsystem.security.CustomUserDetailsService;
 import com.kod95.truckmanagmentsystem.util.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,24 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("v1/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final JwtTokenUtil jwtTokenUtil;
     private final CustomUserDetailsService userDetailsService;
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    @PostMapping
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest authenticationRequest) throws Exception {
         // Authenticate the user using the AuthenticationService
-        authenticationService.authenticate(authenticationRequest.username(), authenticationRequest.password());
+        Authentication authentication = authenticationService.authenticate(authenticationRequest.username(), authenticationRequest.password());
 
         // Load user details to generate JWT
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username());
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
+        final String jwt = jwtTokenUtil.generateToken((UserDetails) authentication.getPrincipal());
 
         // Return the generated JWT in the response
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        var authResponse = new AuthenticationResponse(jwt);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(jwt);
+        return ResponseEntity.ok().headers(httpHeaders).body(authResponse);
     }
 
     @PostMapping("/refresh-token")

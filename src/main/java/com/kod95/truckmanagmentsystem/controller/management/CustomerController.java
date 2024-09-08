@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customer")
+@RequestMapping("v1/customer")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -78,6 +78,31 @@ public class CustomerController {
     public ResponseEntity<List<CustomerDto>> getAllInactive(){
         final var dtoList = service.getAllInactive();
         return ResponseEntity.ok().body(dtoList);
+    }
+
+    @GetMapping("/countActive")
+    public ResponseEntity<Long> countActiveCustomers() {
+        final var dto = service.countActiveCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/countInactive")
+    public ResponseEntity<Long> countInactiveCustomers() {
+        final var dto = service.countInactiveCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/countPending")
+    public ResponseEntity<Long> countPendingCustomer(){
+        final var dto = service.countPendingCustomers();
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Long> countCustomerByUserId(@PathVariable Long id){
+        final var dto = service.countCustomersByUserId(id);
+        return ResponseEntity.ok().body(dto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

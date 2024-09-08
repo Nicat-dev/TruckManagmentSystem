@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("v1/user")
 @RequiredArgsConstructor
 public class UsersController {
 
@@ -34,7 +34,7 @@ public class UsersController {
         return ResponseEntity.ok().body(dto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UsersDto> save(@Valid @RequestBody UserRequest request) throws Exception {
         final var dto = service.save(request);

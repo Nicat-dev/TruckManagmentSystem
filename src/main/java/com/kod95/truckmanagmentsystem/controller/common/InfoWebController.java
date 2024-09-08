@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("/api/v1/info")
+@RequestMapping("/v1/info")
 @RequiredArgsConstructor
 public class InfoWebController {
 
