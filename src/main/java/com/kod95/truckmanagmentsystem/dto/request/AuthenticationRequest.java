@@ -4,7 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record AuthenticationRequest(
-       @NotBlank String username,
-        @NotBlank @Size(min = 6) String password
+        @NotBlank(message = "username cannot be null")
+        String username,
+        @NotBlank(message = "password cannot be null")
+        @Size(min = 6)
+        String password
 ) {
 }

@@ -17,5 +17,6 @@ public record UserRequest(
         String username,
         @NotBlank(message = "password cannot be blank")
         String password,
+        @NotBlank(message = "auth cannot be null")
         UserAuth userAuth) {
 }
