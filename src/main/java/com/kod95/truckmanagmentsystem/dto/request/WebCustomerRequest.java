@@ -8,6 +8,7 @@ public record WebCustomerRequest(
         String name,
         @NotBlank(message = "number cannot be null")
         String number,
+        @NotBlank(message = "customer location cannot bew null")
         CustomerLocationStatus customerLocationStatus
 ) {
 }

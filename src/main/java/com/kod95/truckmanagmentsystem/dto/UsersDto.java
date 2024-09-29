@@ -11,10 +11,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UsersDto {
+
     Long id;
     String name;
     String surname;
     String email;
     Integer age;
     BigDecimal totalRevenue;
+
 }

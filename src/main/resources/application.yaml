@@ -69,10 +69,6 @@ springdoc:
     operationsSorter: method
 
 server:
-  tomcat:
-    remoteip:
-      remote-ip-header: x-forwarded-for
-      protocol-header: x-forwarded-proto
   port: 8080
   compression:
     enabled: true
@@ -94,16 +90,17 @@ server:
     whitelabel:
       enabled: false
 
+logging:
+  level:
+    com.kod95.truckmanagmentsystem: debug
+
 jwt:
   header: Authorization
-  secret-key: 8Zz5tw0Ionm3XPZZfN0NOml3z9FMfmpgXwovR9fp6ryDIoGRM8EPHAB6iHsc0fb
+  secret-key: Vm0weE1HRnRWa2hVV0d4VFltczFjRlZ0TVRSV01WcHhVMnhPYUZKc1NsbFpNR2hMWVRBeFdGVnViRnBXVm5Cb1ZsWmFWMVpWTVVWaGVqQTk=
   expiration-time: 86400000
   encode-algorithm: AES
 
 encryption:
   secret-key: AlL3viZHrAkNe7Uc
 
-logging:
-  level:
-    root: info
 

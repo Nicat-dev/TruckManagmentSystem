@@ -8,16 +8,19 @@ import com.kod95.truckmanagmentsystem.util.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("v1/auth")
@@ -25,12 +28,20 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final JwtTokenUtil jwtTokenUtil;
-    private final CustomUserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @PostMapping
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
+        log.debug("Authentication request: {}", authenticationRequest);
         // Authenticate the user using the AuthenticationService
-        Authentication authentication = authenticationService.authenticate(authenticationRequest.username(), authenticationRequest.password());
+        Authentication authentication = null;
+        try {
+            authentication = authenticationService.authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        } catch (BadCredentialsException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
         // Load user details to generate JWT
         final String jwt = jwtTokenUtil.generateToken((UserDetails) authentication.getPrincipal());
