@@ -1,6 +1,7 @@
 package com.kod95.truckmanagmentsystem.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -35,12 +37,14 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/i18n/",
+                                "/error",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
+                                "/v1/auth",
+                                "/v1/auth/**",
                                 "/v1/webCustomer",
                                 "/v1/info/message",
                                 "/v1/info").permitAll()
-                        .requestMatchers("/v1/auth").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

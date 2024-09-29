@@ -1,13 +1,16 @@
 package com.kod95.truckmanagmentsystem.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record AuthenticationRequest(
-        @NotBlank(message = "username cannot be null")
-        String username,
-        @NotBlank(message = "password cannot be null")
-        @Size(min = 6)
-        String password
-) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthenticationRequest {
+    @NotBlank
+    private String username;
+    @NotBlank
+    private String password;
 }
